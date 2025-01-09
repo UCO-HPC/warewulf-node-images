@@ -1,4 +1,4 @@
-FROM quay.io/almalinuxorg/almalinux:9
+FROM quay.io/almalinuxorg/almalinux-bootc:9
 
 RUN dnf update -y \
     && dnf install -y --allowerasing \

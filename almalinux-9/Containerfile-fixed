@@ -1,4 +1,4 @@
-FROM quay.io/almalinuxorg/almalinux:${release}
+FROM quay.io/almalinuxorg/almalinux-bootc:${release}
 
 RUN sed -i /etc/yum.repos.d/almalinux*.repo \
       -e 's/^# baseurl=/baseurl=/' \
