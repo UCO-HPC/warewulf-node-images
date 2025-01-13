@@ -1,10 +1,12 @@
-FROM quay.io/almalinuxorg/almalinux-bootc:${release}
+FROM quay.io/almalinuxorg/almalinux:${release}
 
 RUN sed -i /etc/yum.repos.d/almalinux*.repo \
       -e 's/^# baseurl=/baseurl=/' \
       -e 's/^mirrorlist=/#mirrorlist=/' \
-      -e 's/\$releasever/${release}/' \
+      -e 's/\$releasever/9.5/' \
     && dnf clean all
+
+ADD https://raw.githubusercontent.com/TurboVNC/repo/main/TurboVNC.repo /etc/yum.repos.d/TurboVNC.repo
 
 RUN dnf update -y \
     && dnf install -y --allowerasing \
@@ -32,6 +34,37 @@ RUN dnf update -y \
       wget \
       which \
       words \
+    && dnf install -y epel-release \
+    && dnf install -y https://www.elrepo.org/elrepo-release-9.el9.elrepo.noarch.rpm \
+    && dnf install -y --allowerasing \
+		acl almalinux-release at attr bc cpio crontabs cyrus-sasl-plain \
+	    dbus ed file irqbalance kpatch kpatch-dnf logrotate lsof mcelog \
+	    microcode_ctl net-tools pciutils psacct quota sudo symlinks \
+	    systemd-udev tar tree tuned util-linux-user bash-completion \
+	    bluez bpftool bzip2 chrony cockpit cryptsetup dos2unix \
+	    dosfstools ethtool gnupg2 iprutils kmod-kvdo ledmon lvm2 \
+	    mailcap man-pages mdadm mlocate mtr nano nvme-cli realmd rsync \
+	    smartmontools sos sssd strace teamd time unzip usbutils vdo \
+	    virt-what which words xfsdump zip cifs-utils cockpit-doc fwupd \
+	    ima-evm-utils nfs-utils nvmetcli traceroute vdo-support zsh \
+	    glibc-all-langpacks \
+	    NetworkManager NetworkManager-tui device-mapper dnf kernel-core \
+	    nfs-utils openssh openssh-clients openssh-server sudo less \
+	    dnf-plugins-core nano bat wget \
+	    autoconf automake binutils bison flex gcc gcc-c++ gdb \
+        glibc-devel libtool make pkgconf pkgconf-m4 pkgconf-pkg-config \
+        redhat-rpm-config rpm-build rpm-sign strace asciidoc byacc \
+        diffstat git intltool jna ltrace patchutils perl-Fedora-VSP \
+        perl-generators pesign source-highlight systemtap valgrind \
+        valgrind-devel \
+        ibacm infiniband-diags iwpmd kmod-mlx4 libibumad libibverbs \
+        libibverbs-utils librdmacm librdmacm-utils libvma mstflint \
+        opensm perftest rdma-core srp_daemon \
+        ipa-client \
+        lua lua-posix lua-term tcl \
+        munge slurm slurm-slurmd slurm-perlapi \
+        nmap-ncat turbovnc python3-websockify xfce4-session xfwm4 \
+        xfdesktop libGL xfce4-settings \
     && dnf remove -y selinux-policy \
     && dnf clean all
 
