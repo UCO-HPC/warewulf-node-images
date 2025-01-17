@@ -1,30 +1,23 @@
-FROM quay.io/almalinuxorg/almalinux-bootc:9
+FROM quay.io/almalinuxorg/9-minimal:9
+
+RUN microdnf install -y dnf \
+    && dnf remove -y microdnf
 
 RUN dnf update -y \
+    && dnf install -y --allowerasing @core \
     && dnf install -y --allowerasing \
-      coreutils \
-      cpio \
       dhclient \
-      e2fsprogs \
-      ethtool \
-      findutils \
       initscripts \
       ipmitool \
-      iproute \
       kernel-core \
       kernel-modules \
       net-tools \
-      NetworkManager \
       nfs-utils \
-      openssh-clients \
-      openssh-server \
       pciutils \
-      psmisc \
       rsync \
-      rsyslog \
       strace \
+      sudo \
       wget \
-      which \
       words \
     && dnf remove -y selinux-policy \
     && dnf clean all

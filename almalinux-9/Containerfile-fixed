@@ -1,41 +1,33 @@
-FROM quay.io/almalinuxorg/almalinux:${release}
+FROM quay.io/almalinuxorg/9-minimal:${release}
 
 RUN sed -i /etc/yum.repos.d/almalinux*.repo \
       -e 's/^# baseurl=/baseurl=/' \
       -e 's/^mirrorlist=/#mirrorlist=/' \
-      -e 's/\$releasever/9.5/' \
-    && dnf clean all
+      -e 's/\$releasever/${release}/' \
+    && microdnf clean all
+
+RUN microdnf install -y dnf \
+    && dnf remove -y microdnf
 
 ADD https://raw.githubusercontent.com/TurboVNC/repo/main/TurboVNC.repo /etc/yum.repos.d/TurboVNC.repo
 
 RUN dnf update -y \
+    && dnf install -y --allowerasing @core \
     && dnf install -y --allowerasing \
-      coreutils \
-      cpio \
       dhclient \
-      e2fsprogs \
-      ethtool \
-      findutils \
       initscripts \
       ipmitool \
-      iproute \
       kernel-core \
       kernel-modules \
       net-tools \
-      NetworkManager \
       nfs-utils \
-      openssh-clients \
-      openssh-server \
       pciutils \
-      psmisc \
       rsync \
-      rsyslog \
       strace \
+      sudo \
       wget \
-      which \
       words \
-    && dnf install -y epel-release \
-    && dnf install -y https://www.elrepo.org/elrepo-release-9.el9.elrepo.noarch.rpm \
+    && dnf install -y epel-release elrepo-release \
     && dnf install -y --allowerasing \
 		acl almalinux-release at attr bc cpio crontabs cyrus-sasl-plain \
 	    dbus ed file irqbalance kpatch kpatch-dnf logrotate lsof mcelog \
